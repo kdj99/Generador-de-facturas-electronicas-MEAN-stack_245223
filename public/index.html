@@ -1,0 +1,132 @@
+<html ng-app="myApp">
+<head>
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+	<title>Facturacion electronica</title>
+</head>
+<body ng-controller="efacturaCtrl">
+	<h1>Menu de sistema</h1>
+	<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">e-factura</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><button class="btn btn-primary">Manejo de clientes</button></li>
+        <li><button class="btn btn-success">Generar factura electronica</button></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container">
+<h1>Modulo de manejo de clientes</h1>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Nombre</th>
+				<th>Fecha de nacimiento</th>
+				<th>Direccion</th>
+				<th>Telefono</th>
+				<th>E-Mail</th>
+				<th>RFC</th>
+				<th>&nbsp;</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><input class="form-control" ng-model="cliente.nombre"></td>
+				<td><input class="form-control" ng-model="cliente.fecha"></td>
+				<td><input class="form-control" ng-model="cliente.direccion"></td>
+				<td><input class="form-control" ng-model="cliente.telefono"></td>
+				<td><input class="form-control" ng-model="cliente.email"></td>
+				<td><input class="form-control" ng-model="cliente.rfc"></td>
+				<td><button class="btn btn-success" ng-click="addCliente()">Ingresar Cliente</button></td>
+				<td><button class="btn btn-info" ng-click="actualizar()">Actualizar Cliente</button>&nbsp;&nbsp;</td>
+			</tr>	
+			<tr ng-repeat="cliente in efactura">
+				<td>{{cliente.nombre}}</td>
+				<td>{{cliente.fecha}}</td>
+				<td>{{cliente.direccion}}</td>
+				<td>{{cliente.telefono}}</td>
+				<td>{{cliente.email}}</td>
+				<td>{{cliente.rfc}}</td>
+				<td><button class="btn btn-danger" ng-click="remover(cliente._id)">Eliminar cliente</button>
+				</td>
+				<td><button class="btn btn-warning" ng-click="editar(cliente._id)">Editar cliente</button></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<div class="container">
+<h1>Modulo de generacion de factura electronica</h1>
+<span>Selecciona el cliente a facturar</span>
+</br>
+	<div class="panel panel-primary">		
+<table align="center" class="table table-bordered table-striped table-hover">
+    <thead>
+      <tr>
+      	<th>Accion</th>
+        <th>Nombre del producto</th>
+        <th>Cantidad</th>
+        <th>Valor unitario</th>
+        <th>Importe</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="producto in productos">
+        <td><button class="btn btn-danger" ng-click="eliminar($index)">Eliminar de la factura</button><br></td>
+        <td>{{producto.nombre}}</td>
+        <td><input type="number" ng-model="producto.cantidad" ng-change="actualizar_factura($index)"></td>
+        <td>$ {{producto.unitario}}</td>
+        <td>$ {{producto.importe}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<button ng-click="generar()"  class="btn btn-success">Generar factura electronica</button>
+<hr>
+<div align="center">
+<h2>Subtotal: $<strong>{{subtotal}} Pesos</strong></h2>
+<h2>IVA (16%): $<strong>{{iva}} Pesos</strong></h2>
+<h1>Total: $<strong>{{total}} Pesos</strong></h1>
+</div>
+<hr>
+<h1 align="center">Ingreso de productos a la factura</h1>
+<form ng-submit="add(producto)" align="center">
+
+<div class="row">
+  <div class="col-md-3"><strong>Nombre del producto: </strong><input type="text" ng-model="producto.nombre">
+  </div>
+  <div class="col-md-3"><strong>Cantidad: </strong><input type="number" ng-model="producto.cantidad">
+  </div>
+  <div class="col-md-3"><div class="input-group">
+    <strong>Precio: </strong><span class="input-group-addon">$</span>
+    <input ng-model="producto.unitario" type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+    <span class="input-group-addon">.00</span>
+    </div>
+  </div>
+  <div class="col-md-3"><input type="submit" value="Agregar producto a la factura" class="btn btn-primary">
+  </div>
+</form>
+</div>
+</div>
+-->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+	<script src="controllers/controller.js"></script>
+</body>
+</html>
