@@ -33,6 +33,7 @@
 
 <div class="container">
 <h1>Modulo de manejo de clientes</h1>
+{{!!forma_cliente.$error.required}}
 	<table class="table">
 		<thead>
 			<tr>
@@ -47,13 +48,16 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td><input class="form-control" ng-model="cliente.nombre"></td>
-				<td><input class="form-control" ng-model="cliente.fecha"></td>
-				<td><input class="form-control" ng-model="cliente.direccion"></td>
-				<td><input class="form-control" ng-model="cliente.telefono"></td>
-				<td><input class="form-control" ng-model="cliente.email"></td>
-				<td><input class="form-control" ng-model="cliente.rfc"></td>
-				<td><button class="btn btn-success" ng-click="addCliente()">Ingresar Cliente</button></td>
+        <form name="forma_cliente">
+				<td><input name="nombre" type="text"  class="form-control" ng-model="cliente.nombre"></td>
+				<td><input name="fecha" type="date"  class="form-control" ng-model="cliente.fecha"></td>
+				<td><input name="direccion" type="text" class="form-control" ng-model="cliente.direccion"></td>
+				<td><input name="telefono" type="number" class="form-control" ng-model="cliente.telefono"></td>
+				<td><input name="email" type="email" class="form-control" ng-model="cliente.email"></td>
+				<td><input class="form-control" type="text" name="rfc" ng-model="cliente.rfc" ng-pattern="regex.rfc" required ng-trim="false"></td><!--Aqui debe mostrar false cuando no tiene RFC-->
+        {{forma_cliente.rfc.$valid}}
+				<td><input type="button" class="btn btn-success" value="Ingresar cliente" ng-click="addCliente()"></td>
+        </form>
 				<td><button class="btn btn-info" ng-click="actualizar()">Actualizar Cliente</button>&nbsp;&nbsp;</td>
 			</tr>	
 			<tr ng-repeat="cliente in efactura">
@@ -84,7 +88,6 @@
         <th>Cantidad</th>
         <th>Valor unitario</th>
         <th>Importe</th>
-
       </tr>
     </thead>
     <tbody>
@@ -109,7 +112,7 @@
 <h1 align="center">Ingreso de productos a la factura</h1>
 <form ng-submit="add(producto)" align="center">
 
-<div class="row">
+<div class="container">
   <div class="col-md-3"><strong>Nombre del producto: </strong><input type="text" ng-model="producto.nombre">
   </div>
   <div class="col-md-3"><strong>Cantidad: </strong><input type="number" ng-model="producto.cantidad">
@@ -117,7 +120,6 @@
   <div class="col-md-3"><div class="input-group">
     <strong>Precio: </strong><span class="input-group-addon">$</span>
     <input ng-model="producto.unitario" type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-    <span class="input-group-addon">.00</span>
     </div>
   </div>
   <div class="col-md-3"><input type="submit" value="Agregar producto a la factura" class="btn btn-primary">
@@ -126,7 +128,7 @@
 </div>
 </div>
 -->
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 	<script src="controllers/controller.js"></script>
 </body>
 </html>
