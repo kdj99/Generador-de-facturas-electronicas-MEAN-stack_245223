@@ -12,6 +12,7 @@ $scope.regex = {
 
 $scope.botonactualizar=false;
 $scope.moduloclientes=true;
+$scope.date = new Date();
 
 
 function soloNumeros(e) {

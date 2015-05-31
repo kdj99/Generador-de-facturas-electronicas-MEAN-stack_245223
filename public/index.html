@@ -1,17 +1,15 @@
 <html ng-app="myApp">
 <head>
-	<!-- Latest compiled and minified CSS -->
+	<!-- CDN de bootstrap -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
-<!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 	<title>Facturacion electronica</title>
 </head>
-<body ng-controller="efacturaCtrl">
+<body ng-controller="efacturaCtrl" background="img/background.png">
 	<h1>Menu de sistema</h1>
 	<nav class="navbar navbar-default">
   <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
         <span class="icon-bar"></span>
@@ -21,14 +19,14 @@
       <a class="navbar-brand" href="#">e-factura</a>
     </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
+
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li><button class="btn btn-primary" ng-click="moduloclientes=true">Modulo de manejo de clientes</button></li>
         <li><button class="btn btn-success" ng-click="moduloclientes=false">Modulo para expedir una factura electronica</button></li>
       </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
+    </div>
+  </div>
 </nav>
 
 <div ng-show="moduloclientes==true" class="container">
@@ -40,34 +38,31 @@
         <input name="telefono" id="inputTelefono" type="number" class="form-control" placeholder="ingresa el numero de telefono del cliente" ng-model="cliente.telefono" ng-pattern="regex.telefono" required ng-trim="false" onkeypress="return soloNumeros(event);">
         <input name="email" type="email" class="form-control" placeholder="ingresa el email del cliente" ng-model="cliente.email" ng-pattern="regex.email" required ng-trim="false">
         <input name="rfc" type="text" class="form-control" placeholder="RFC del cliente" ng-model="cliente.rfc" ng-pattern="regex.rfc" required ng-trim="false" style="text-transform:uppercase">
-        <input type="button" class="btn btn-success" value="Ingresar cliente" ng-disabled="!forma_cliente.$valid||botonactualizar==true" ng-click="addCliente()">
+        <input type="button" class="btn btn-success" value="Ingresar cliente" ng-disabled=" !forma_cliente.$valid||botonactualizar==true" ng-click="addCliente()">
         <button class="btn btn-info" ng-click="actualizar()" ng-disabled="botonactualizar==false">Actualizar Cliente</button>&nbsp;&nbsp;
 </form>
 </br>
 &nbsp;&nbsp;
 <!--Alertas de validacion para ingresar un cliente-->
-<div class="container">
-<span class="alert alert-danger" ng-show="forma_cliente.nombre.$error.required">Nombre requerido!</span>
-<span class="alert alert-success" ng-show="forma_cliente.nombre.$valid">El nombre ingresado es corrrecto, asegurate de que los datos del domicilio esten completos</span>
-
-<span class="alert alert-danger" ng-show="forma_cliente.direccion.$error.required">Domicilio requerido!</span>
-<span class="alert alert-success" ng-show="forma_cliente.direccion.$valid">El domicilio ingresado es corrrecto, asegurate de que los datos del domicilio esten completos</span>
-
-<span class="alert alert-danger" ng-show="forma_cliente.telefono.$error.pattern">Ejemplo de formato para telefono: 6142770598, 614 277 0598</span>
-<span class="alert alert-danger" ng-show="forma_cliente.telefono.$error.required">Numero de telefono requerido!</span>
-<span class="alert alert-success" ng-show="forma_cliente.telefono.$valid">El numero de telefono ingresado es corrrecto.</span>
-  
-<span class="alert alert-danger" ng-show="forma_cliente.email.$error.pattern">Ingresa un E-mail valido por favor.</span>
-<span class="alert alert-danger" ng-show="forma_cliente.email.$error.required">Email requerido!</span>
-<span class="alert alert-success" ng-show="forma_cliente.email.$valid">El E-mail ingresado es corrrecto.</span>
-
-<span class="alert alert-danger" ng-show="forma_cliente.rfc.$error.pattern">Ingresa un RFC valido por favor.</span>
-<span class="alert alert-danger" ng-show="forma_cliente.rfc.$error.required">RFC Requerido!</span>
-<span class="alert alert-success" ng-show="forma_cliente.rfc.$valid">El RFC ingresado es corrrecto.</span>
-</div>
+<ul class="list-group">
+  <li class="list-group-item list-group-item-danger" ng-show="forma_cliente.nombre.$error.required">Nombre Requerido !</li>
+  <li class="list-group-item list-group-item-success"ng-show="forma_cliente.nombre.$valid">El nombre ingresado es corrrecto, asegurate de que el nombre este completo</li>
+  <li class="list-group-item list-group-item-danger" ng-show="forma_cliente.direccion.$error.required">Domicilio requerido !</li>
+  <li class="list-group-item list-group-item-success" ng-show="forma_cliente.direccion.$valid">El domicilio ingresado es corrrecto, asegurate de que los datos del domicilio esten completos</li>
+  <li class="list-group-item list-group-item-danger" ng-show="forma_cliente.telefono.$error.pattern">Ejemplo de formato para telefono: 6142770598, 614 277 0598</li>
+  <li class="list-group-item list-group-item-danger" ng-show="forma_cliente.telefono.$error.required">Numero de telefono requerido !</li>
+  <li class="list-group-item list-group-item-success" ng-show="forma_cliente.telefono.$valid">El numero de telefono ingresado es corrrecto</li>
+  <li class="list-group-item list-group-item-danger" ng-show="forma_cliente.email.$error.pattern">Ingresa un E-mail valido por favor</li>
+  <li class="list-group-item list-group-item-danger" ng-show="forma_cliente.email.$error.required">Email requerido !</li>
+  <li class="list-group-item list-group-item-success"ng-show="forma_cliente.email.$valid">El E-mail ingresado es corrrecto.</li>
+  <li class="list-group-item list-group-item-danger" ng-show="forma_cliente.rfc.$error.pattern">Ingresa un RFC valido por favor</li>
+  <li class="list-group-item list-group-item-danger" ng-show="forma_cliente.rfc.$error.required">RFC Requerido !</li>
+  <li class="list-group-item list-group-item-success" ng-show="forma_cliente.rfc.$valid">El RFC ingresado es corrrecto.</li>
+</ul>
 &nbsp;&nbsp;
 <div class="panel-heading"><input type="text" ng-model="searchCliente" class="input-large search-query" placeholder="Buscar Cliente">
-</div>      
+</div>
+<h3 align="center">Clientes registrados en el sistema</h3>      
 	<table class="table">
 		<thead>
 			<tr>
@@ -76,6 +71,7 @@
 				<th>Telefono</th>
 				<th>E-Mail</th>
 				<th>RFC</th>
+        <th>Accion</th>
 				<th>&nbsp;</th>
 			</tr>
 		</thead>
@@ -96,21 +92,9 @@
 
 <div ng-show="moduloclientes==false;" class="container">
 <h1>Modulo de generacion de factura electronica</h1>
-<div class="page-header">
-  <h2>Mis datos de facturacion</h2> 
-  <br>
-  <small>Nombre de la empresa</small>
-  <br>
-  <small>RFC</small>
-  <br>
-  <small>Direccion</small>
-  <br>
-  <small>Ciudad/Estado</small>
-  <br>
-  <small>Codigo Postal</small>
-</div>
 <h4>Selecciona el cliente a facturar</h4>
 <div class="panel-heading"><input type="text" ng-model="searchCliente" class="input-large search-query" placeholder="Buscar Cliente">
+<span>Fecha: {{date | date:'yyyy-MM-dd'}}</span>  
 </div>
 <table class="table">
     <thead>
@@ -178,7 +162,7 @@
     <input ng-model="producto.unitario" type="number" name="precio" ng-pattern="regex.cifra" required ng-trim="false" class="form-control" aria-label="Amount">
     </div>
   </div>
-  <div class="col-md-3"><input type="reset" ng-disabled="!forma_producto.$valid" value="Agregar producto a la factura" class="btn btn-primary">
+  <div class="col-md-3"><input type="submit" ng-disabled=" !forma_producto.$valid" value="Agregar producto a la factura" class="btn btn-primary">
   </div>
 </form>
 </div>
