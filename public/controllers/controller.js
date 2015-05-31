@@ -2,10 +2,40 @@ var myApp = angular.module('myApp',[]);
 myApp.controller('efacturaCtrl',['$scope','$http', function($scope, $http){
 	console.log("Hola mundo desde el controlador");
 
-/*Aqui esta la variable donde tengo la expresion regular y lo agarro con el ng-pattern*/
+/*Ng-pattern usa la variable regex para comparar los campos asignados a cada input a validar*/
 $scope.regex = {
-        rfc: /^[a-zA-Z]{3,4}(\d{6})((\D|\d){3})?$/
+        telefono: /^[0-9]{3}-? ?[0-9]{7}$/,
+        email: /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/,
+        rfc: /^[a-zA-Z]{3,4}(\d{6})((\D|\d){3})?$/,
+        cifra: /^[0-9]{1,6}$/
       };
+
+$scope.botonactualizar=false;
+$scope.moduloclientes=true;
+
+
+function soloNumeros(e) {
+// capturamos la tecla pulsada
+        var teclaPulsada=window.event ? window.event.keyCode:e.which;
+        // capturamos el contenido del input
+        var valor=document.getElementById("inputTelefono").value;
+ 
+        if(valor.length<10)
+        {
+            // 13 = tecla enter
+            // Si el usuario pulsa la tecla enter o el punto y no hay ningun otro
+            // punto
+            if(teclaPulsada==13)
+            {
+                return true;
+            }
+ 
+            // devolvemos true o false dependiendo de si es numerico o no
+            return /\d/.test(String.fromCharCode(teclaPulsada));
+        }else{
+            return false;
+        }
+}      
 $scope.productos = [];
 $scope.add = function(p)
     {
@@ -39,12 +69,29 @@ $scope.eliminar = function(c)
 $scope.actualizar_factura = function(i)
     {
       $scope.productos[i].importe=0;
+      $scope.cantidad_total=0;
       $scope.productos[i].importe = $scope.productos[i].cantidad * $scope.productos[i].unitario;
+      for(i=0;i<$scope.productos.length;i++)
+      {
+        var temp=0;
+        temp=$scope.productos[i].cantidad;
+        $scope.cantidad_total=$scope.cantidad_total+temp;
+      }
       subtotalizar();
       iva();
       totalizar();
     }
-
+$scope.validar_producto=function()
+{
+  $scope.nombreRepetido==false;
+  for(i=0;i<$scope.productos.length;i++)
+  {
+    if($scope.productos[i].nombre==producto.nombre)
+    {
+      $scope.nombreRepetido==true;
+    }
+  }
+}
 var iva = function()
     {
       $scope.iva=($scope.subtotal * 16) / 100;
@@ -71,6 +118,7 @@ var refresh = function() {
 		console.log("Recibi los datos que pediste");
 		$scope.efactura = response;
 		$scope.cliente = "";
+    $scope.botonactualizar=false;
 	});
 }
 
@@ -100,7 +148,8 @@ $scope.remover = function(id) {
 };	
 
 $scope.editar = function(id){
-	console.log(id);
+	$scope.botonactualizar=true;
+  console.log(id);
 	$http.get('/efactura/' + id).success(function(response){
 		$scope.cliente = response;
 	});
@@ -111,6 +160,7 @@ $scope.actualizar = function(){
   alert("Datos del cliente actualizados correctamente en el sistema :) !");  
 	refresh();
 	$scope.cliente = "";
+  $scope.botonactualizar=false;
 	});
 
 };

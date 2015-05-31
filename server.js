@@ -42,7 +42,7 @@ app.put('/efactura/:id', function (req, res) {
   console.log(req.body.name);
   db.efactura.findAndModify({
     query: {_id: mongojs.ObjectId(id)},
-    update: {$set: {nombre: req.body.nombre, fecha: req.body.fecha, direccion: req.body.direccion,
+    update: {$set: {nombre: req.body.nombre, direccion: req.body.direccion,
      telefono: req.body.telefono, email: req.body.email, rfc: req.body.rfc}},
     new: true}, function (err, doc) {
       res.json(doc);

@@ -24,21 +24,54 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><button class="btn btn-primary">Manejo de clientes</button></li>
-        <li><button class="btn btn-success">Generar factura electronica</button></li>
+        <li><button class="btn btn-primary" ng-click="moduloclientes=true">Modulo de manejo de clientes</button></li>
+        <li><button class="btn btn-success" ng-click="moduloclientes=false">Modulo para expedir una factura electronica</button></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
 
-<div class="container">
+<div ng-show="moduloclientes==true" class="container">
 <h1>Modulo de manejo de clientes</h1>
-{{!!forma_cliente.$error.required}}
+<h3 align="center">Ingreso de cliente al sistema</h3>
+<form class="navbar-form navbar-center" name="forma_cliente">
+        <input name="nombre" type="text"  class="form-control" placeholder="ingresa el nombre del cliente" ng-model="cliente.nombre" required ng-trim="false">
+        <input name="direccion" type="text" class="form-control" placeholder="ingresa el domicilio del cliente" ng-model="cliente.direccion" required ng-trim="false">
+        <input name="telefono" id="inputTelefono" type="number" class="form-control" placeholder="ingresa el numero de telefono del cliente" ng-model="cliente.telefono" ng-pattern="regex.telefono" required ng-trim="false" onkeypress="return soloNumeros(event);">
+        <input name="email" type="email" class="form-control" placeholder="ingresa el email del cliente" ng-model="cliente.email" ng-pattern="regex.email" required ng-trim="false">
+        <input name="rfc" type="text" class="form-control" placeholder="RFC del cliente" ng-model="cliente.rfc" ng-pattern="regex.rfc" required ng-trim="false" style="text-transform:uppercase">
+        <input type="button" class="btn btn-success" value="Ingresar cliente" ng-disabled="!forma_cliente.$valid||botonactualizar==true" ng-click="addCliente()">
+        <button class="btn btn-info" ng-click="actualizar()" ng-disabled="botonactualizar==false">Actualizar Cliente</button>&nbsp;&nbsp;
+</form>
+</br>
+&nbsp;&nbsp;
+<!--Alertas de validacion para ingresar un cliente-->
+<div class="container">
+<span class="alert alert-danger" ng-show="forma_cliente.nombre.$error.required">Nombre requerido!</span>
+<span class="alert alert-success" ng-show="forma_cliente.nombre.$valid">El nombre ingresado es corrrecto, asegurate de que los datos del domicilio esten completos</span>
+
+<span class="alert alert-danger" ng-show="forma_cliente.direccion.$error.required">Domicilio requerido!</span>
+<span class="alert alert-success" ng-show="forma_cliente.direccion.$valid">El domicilio ingresado es corrrecto, asegurate de que los datos del domicilio esten completos</span>
+
+<span class="alert alert-danger" ng-show="forma_cliente.telefono.$error.pattern">Ejemplo de formato para telefono: 6142770598, 614 277 0598</span>
+<span class="alert alert-danger" ng-show="forma_cliente.telefono.$error.required">Numero de telefono requerido!</span>
+<span class="alert alert-success" ng-show="forma_cliente.telefono.$valid">El numero de telefono ingresado es corrrecto.</span>
+  
+<span class="alert alert-danger" ng-show="forma_cliente.email.$error.pattern">Ingresa un E-mail valido por favor.</span>
+<span class="alert alert-danger" ng-show="forma_cliente.email.$error.required">Email requerido!</span>
+<span class="alert alert-success" ng-show="forma_cliente.email.$valid">El E-mail ingresado es corrrecto.</span>
+
+<span class="alert alert-danger" ng-show="forma_cliente.rfc.$error.pattern">Ingresa un RFC valido por favor.</span>
+<span class="alert alert-danger" ng-show="forma_cliente.rfc.$error.required">RFC Requerido!</span>
+<span class="alert alert-success" ng-show="forma_cliente.rfc.$valid">El RFC ingresado es corrrecto.</span>
+</div>
+&nbsp;&nbsp;
+<div class="panel-heading"><input type="text" ng-model="searchCliente" class="input-large search-query" placeholder="Buscar Cliente">
+</div>      
 	<table class="table">
 		<thead>
 			<tr>
 				<th>Nombre</th>
-				<th>Fecha de nacimiento</th>
 				<th>Direccion</th>
 				<th>Telefono</th>
 				<th>E-Mail</th>
@@ -47,26 +80,12 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-        <form name="forma_cliente">
-				<td><input name="nombre" type="text"  class="form-control" ng-model="cliente.nombre"></td>
-				<td><input name="fecha" type="date"  class="form-control" ng-model="cliente.fecha"></td>
-				<td><input name="direccion" type="text" class="form-control" ng-model="cliente.direccion"></td>
-				<td><input name="telefono" type="number" class="form-control" ng-model="cliente.telefono"></td>
-				<td><input name="email" type="email" class="form-control" ng-model="cliente.email"></td>
-				<td><input class="form-control" type="text" name="rfc" ng-model="cliente.rfc" ng-pattern="regex.rfc" required ng-trim="false"></td><!--Aqui debe mostrar false cuando no tiene RFC-->
-        {{forma_cliente.rfc.$valid}}
-				<td><input type="button" class="btn btn-success" value="Ingresar cliente" ng-click="addCliente()"></td>
-        </form>
-				<td><button class="btn btn-info" ng-click="actualizar()">Actualizar Cliente</button>&nbsp;&nbsp;</td>
-			</tr>	
-			<tr ng-repeat="cliente in efactura">
-				<td>{{cliente.nombre}}</td>
-				<td>{{cliente.fecha}}</td>
+			<tr ng-repeat="cliente in efactura | filter:searchCliente">
+				<td>{{cliente.nombre | uppercase}}</td>
 				<td>{{cliente.direccion}}</td>
 				<td>{{cliente.telefono}}</td>
 				<td>{{cliente.email}}</td>
-				<td>{{cliente.rfc}}</td>
+				<td>{{cliente.rfc | uppercase}}</td>
 				<td><button class="btn btn-danger" ng-click="remover(cliente._id)">Eliminar cliente</button>
 				</td>
 				<td><button class="btn btn-warning" ng-click="editar(cliente._id)">Editar cliente</button></td>
@@ -75,9 +94,46 @@
 	</table>
 </div>
 
-<div class="container">
+<div ng-show="moduloclientes==false;" class="container">
 <h1>Modulo de generacion de factura electronica</h1>
-<span>Selecciona el cliente a facturar</span>
+<div class="page-header">
+  <h2>Mis datos de facturacion</h2> 
+  <br>
+  <small>Nombre de la empresa</small>
+  <br>
+  <small>RFC</small>
+  <br>
+  <small>Direccion</small>
+  <br>
+  <small>Ciudad/Estado</small>
+  <br>
+  <small>Codigo Postal</small>
+</div>
+<h4>Selecciona el cliente a facturar</h4>
+<div class="panel-heading"><input type="text" ng-model="searchCliente" class="input-large search-query" placeholder="Buscar Cliente">
+</div>
+<table class="table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Direccion</th>
+        <th>Telefono</th>
+        <th>E-Mail</th>
+        <th>RFC</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="cliente in efactura | filter:searchCliente">
+        <td>{{cliente.nombre | uppercase}}</td>
+        <td>{{cliente.direccion}}</td>
+        <td>{{cliente.telefono}}</td>
+        <td>{{cliente.email}}</td>
+        <td>{{cliente.rfc | uppercase}}</td>
+        <td>Seleccionar para facturar: <input type="checkbox"></td>
+      </tr>
+    </tbody>
+  </table>
 </br>
 	<div class="panel panel-primary">		
 <table align="center" class="table table-bordered table-striped table-hover">
@@ -101,7 +157,7 @@
     </tbody>
   </table>
 </div>
-<button ng-click="generar()"  class="btn btn-success">Generar factura electronica</button>
+<button ng-click="generar()" ng-disabled="productos.length==0||cantidad_total==0" class="btn btn-success">Generar factura electronica</button>
 <hr>
 <div align="center">
 <h2>Subtotal: $<strong>{{subtotal}} Pesos</strong></h2>
@@ -110,19 +166,19 @@
 </div>
 <hr>
 <h1 align="center">Ingreso de productos a la factura</h1>
-<form ng-submit="add(producto)" align="center">
+<form ng-submit="add(producto)" align="center" name="forma_producto">
 
 <div class="container">
-  <div class="col-md-3"><strong>Nombre del producto: </strong><input type="text" ng-model="producto.nombre">
+  <div class="col-md-3"><strong>Nombre del producto: </strong><input type="text" ng-model="producto.nombre" required ng-trim="false">
   </div>
-  <div class="col-md-3"><strong>Cantidad: </strong><input type="number" ng-model="producto.cantidad">
+  <div class="col-md-3"><strong>Cantidad: </strong><input type="number" name="cantidad" ng-pattern="regex.cifra" required ng-trim="false" ng-change="cantidad_total=producto.cantidad" ng-model="producto.cantidad">
   </div>
   <div class="col-md-3"><div class="input-group">
     <strong>Precio: </strong><span class="input-group-addon">$</span>
-    <input ng-model="producto.unitario" type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+    <input ng-model="producto.unitario" type="number" name="precio" ng-pattern="regex.cifra" required ng-trim="false" class="form-control" aria-label="Amount">
     </div>
   </div>
-  <div class="col-md-3"><input type="submit" value="Agregar producto a la factura" class="btn btn-primary">
+  <div class="col-md-3"><input type="reset" ng-disabled="!forma_producto.$valid" value="Agregar producto a la factura" class="btn btn-primary">
   </div>
 </form>
 </div>
