@@ -35,7 +35,7 @@
 <form class="navbar-form navbar-center" name="forma_cliente">
         <input name="nombre" type="text"  class="form-control" placeholder="ingresa el nombre del cliente" ng-model="cliente.nombre" required ng-trim="false">
         <input name="direccion" type="text" class="form-control" placeholder="ingresa el domicilio del cliente" ng-model="cliente.direccion" required ng-trim="false">
-        <input name="telefono" id="inputTelefono" type="number" class="form-control" placeholder="ingresa el numero de telefono del cliente" ng-model="cliente.telefono" ng-pattern="regex.telefono" required ng-trim="false" onkeypress="return soloNumeros(event);">
+        <input name="telefono" id="inputTelefono" type="number" class="form-control" placeholder="ingresa el numero de telefono del cliente" ng-model="cliente.telefono" ng-pattern="regex.telefono" required ng-trim="false">
         <input name="email" type="email" class="form-control" placeholder="ingresa el email del cliente" ng-model="cliente.email" ng-pattern="regex.email" required ng-trim="false">
         <input name="rfc" type="text" class="form-control" placeholder="RFC del cliente" ng-model="cliente.rfc" ng-pattern="regex.rfc" required ng-trim="false" style="text-transform:uppercase">
         <input type="button" class="btn btn-success" value="Ingresar cliente" ng-disabled=" !forma_cliente.$valid||botonactualizar==true" ng-click="addCliente()">
@@ -93,8 +93,8 @@
 <div ng-show="moduloclientes==false;" class="container">
 <h1>Modulo de generacion de factura electronica</h1>
 <h4>Selecciona el cliente a facturar</h4>
-<div class="panel-heading"><input type="text" ng-model="searchCliente" class="input-large search-query" placeholder="Buscar Cliente">
-<span>Fecha: {{date | date:'yyyy-MM-dd'}}</span>  
+<div class="panel-heading"><input type="text" ng-model="searchClienteFacturar" class="input-large search-query" placeholder="Buscar Cliente">
+<span><strong>Fecha: {{date | date:'yyyy-MM-dd'}}</strong></span>  
 </div>
 <table class="table">
     <thead>
@@ -104,21 +104,32 @@
         <th>Telefono</th>
         <th>E-Mail</th>
         <th>RFC</th>
+        <th>Accion</th>
         <th>&nbsp;</th>
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="cliente in efactura | filter:searchCliente">
+      <tr ng-repeat="cliente in efactura | filter:searchClienteFacturar">
         <td>{{cliente.nombre | uppercase}}</td>
         <td>{{cliente.direccion}}</td>
         <td>{{cliente.telefono}}</td>
         <td>{{cliente.email}}</td>
         <td>{{cliente.rfc | uppercase}}</td>
-        <td>Seleccionar para facturar: <input type="checkbox"></td>
+        <td><button class="btn btn-info" ng-click="seleccionar_cliente(cliente._id)">Seleccionar cliente</button></td>
       </tr>
     </tbody>
   </table>
 </br>
+<h4>Datos del cliente a facturar</h4>
+
+<ul class="list-group" ng-show="cliente_facturar!=0">
+  <li class="list-group-item list-group-item-success"><span>Nombre: {{cliente_facturar.nombre | uppercase}}</span></li>
+  <li class="list-group-item list-group-item-success"><span>Domicilio: {{cliente_facturar.direccion | uppercase}}</span></li>
+  <li class="list-group-item list-group-item-success"><span>Telefono: {{cliente_facturar.telefono}}</span></li>
+  <li class="list-group-item list-group-item-success"><span>Email: {{cliente_facturar.email}}</span></li>
+  <li class="list-group-item list-group-item-success"><span>RFC: {{cliente_facturar.rfc | uppercase}}</span></li>
+</ul>
+
 	<div class="panel panel-primary">		
 <table align="center" class="table table-bordered table-striped table-hover">
     <thead>
@@ -141,7 +152,7 @@
     </tbody>
   </table>
 </div>
-<button ng-click="generar()" ng-disabled="productos.length==0||cantidad_total==0" class="btn btn-success">Generar factura electronica</button>
+<button ng-click="generar()" ng-disabled="productos.length==0||cantidad_total==0||cliente_facturar==0" class="btn btn-success">Generar factura electronica</button>
 <hr>
 <div align="center">
 <h2>Subtotal: $<strong>{{subtotal}} Pesos</strong></h2>
@@ -167,7 +178,6 @@
 </form>
 </div>
 </div>
--->
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 	<script src="controllers/controller.js"></script>
 </body>

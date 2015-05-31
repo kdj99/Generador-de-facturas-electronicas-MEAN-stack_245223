@@ -13,37 +13,20 @@ $scope.regex = {
 $scope.botonactualizar=false;
 $scope.moduloclientes=true;
 $scope.date = new Date();
-
-
-function soloNumeros(e) {
-// capturamos la tecla pulsada
-        var teclaPulsada=window.event ? window.event.keyCode:e.which;
-        // capturamos el contenido del input
-        var valor=document.getElementById("inputTelefono").value;
  
-        if(valor.length<10)
-        {
-            // 13 = tecla enter
-            // Si el usuario pulsa la tecla enter o el punto y no hay ningun otro
-            // punto
-            if(teclaPulsada==13)
-            {
-                return true;
-            }
- 
-            // devolvemos true o false dependiendo de si es numerico o no
-            return /\d/.test(String.fromCharCode(teclaPulsada));
-        }else{
-            return false;
-        }
-}      
 $scope.productos = [];
 $scope.add = function(p)
     {
-      alert("Prodcto agregado correctamente a la factura :) !");
+      for(i=0;i<$scope.productos.length;i++){
+        if(p.nombre==$scope.productos[i].nombre)
+        {
+          alert("El producto ingresado posee el mismo nombre que uno ingresado anteriormente");
+        }
+      }
       var temp = {};
       angular.copy(p, temp);
       $scope.productos.push(temp);
+      alert("Prodcto agregado correctamente a la factura :) !");
       for(i=0;i< $scope.productos.length;i++)
       {
         $scope.productos[i].importe = $scope.productos[i].cantidad * $scope.productos[i].unitario;
@@ -82,17 +65,7 @@ $scope.actualizar_factura = function(i)
       iva();
       totalizar();
     }
-$scope.validar_producto=function()
-{
-  $scope.nombreRepetido==false;
-  for(i=0;i<$scope.productos.length;i++)
-  {
-    if($scope.productos[i].nombre==producto.nombre)
-    {
-      $scope.nombreRepetido==true;
-    }
-  }
-}
+
 var iva = function()
     {
       $scope.iva=($scope.subtotal * 16) / 100;
@@ -119,6 +92,7 @@ var refresh = function() {
 		console.log("Recibi los datos que pediste");
 		$scope.efactura = response;
 		$scope.cliente = "";
+    $scope.cliente_facturar="";
     $scope.botonactualizar=false;
 	});
 }
@@ -163,7 +137,14 @@ $scope.actualizar = function(){
 	$scope.cliente = "";
   $scope.botonactualizar=false;
 	});
+};
 
+$scope.seleccionar_cliente = function(id){
+  console.log("En funcion seleecionar");
+  $http.get('/efactura/' + id).success(function(response){
+    $scope.cliente_facturar = response;
+    console.log($scope.cliente_facturar);
+  });
 };
 
 }]);
