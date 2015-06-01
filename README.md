@@ -30,5 +30,5 @@ jspdf.plugin.cell.js
 FileSaver.js
 generarPDF.js
 
-Todos estos plugins asi como  el script creado "generarPDF.js" se encuentran en una carpeta llamada jspdf en /public/jspdf
+Todos estos plugins asi como  el script creado "generarPDF.js" se encuentran en una carpeta llamada jspdf en /public/jspdf. Es obligatorio la inculsión de estos plugins para poder generar correctamente el PDF.
 
