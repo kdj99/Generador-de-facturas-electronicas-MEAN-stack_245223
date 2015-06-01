@@ -176,7 +176,7 @@ lJ8redA3/WPkNPZg3cVwktLihzbHd+VDD2L5NNezvfsg03Bqy8P8a5Ag4k4kWYBZnrvkrm/XGsJIQy9d
     </tbody>
   </table>
 </div>
-<button id="generar-xml"  ng-disabled="productos.length==0||cantidad_total==0||cliente_facturar==0||producto.importe==0" class="btn btn-success">Generar factura electronica</button>
+<button id="generar-xml" onclick="javascript:generarPDF()"  ng-disabled="productos.length==0||cantidad_total==0||cliente_facturar==0||producto.importe==0" class="btn btn-success">Generar factura electronica</button>
 <hr>
 <div align="center">
 <div class="alert alert-success" ng-hide="productos.length==0||cantidad_total==0||cliente_facturar==0||producto.importe==0" role="alert"><strong>Para generar la factura haz click en "Generar factura electronica", antes revisa que los datos a facturar sean correctos</strong></div>
