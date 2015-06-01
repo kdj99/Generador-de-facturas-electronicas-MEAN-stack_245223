@@ -16,7 +16,7 @@ function descargarArchivo(contenidoEnBlob, nombreArchivo) {
     reader.readAsDataURL(contenidoEnBlob);
 };
 
-//Función de ayuda: reúne los datos a exportar en un solo objeto para el archivo xml
+//reúne los datos a exportar en un solo objeto para el archivo xml
 function obtenerDatos() {
     return {
         nombre_empresa: document.getElementById('facturar.nombre_empresa').value,
@@ -37,11 +37,11 @@ function obtenerDatos() {
         subtotal: document.getElementById('facturar.subtotal').value,
         iva: document.getElementById('facturar.iva').value,
         total: document.getElementById('facturar.total').value,
-        fecha: (new Date()).toLocaleDateString()
+        fecha: (new Date()).toLocaleString("es-MX", {timeZone: "America/Chihuahua"})
     };
 };
 
-//Función de ayuda: "escapa" las entidades XML necesarias
+//"escapa" las entidades XML necesarias
 //para los valores (y atributos) del archivo XML
 function escaparXML(cadena) {
     if (typeof cadena !== 'string') {
@@ -55,11 +55,29 @@ function escaparXML(cadena) {
 };
 
 
-//Genera un objeto Blob con los datos en un archivo XML
+//Genera un objeto con los datos para el archivo XML
 function generarXml(datos) {
     var texto = [];
     texto.push('<?xml version="1.0" encoding="UTF-8" ?>\n');
     texto.push('<factura>\n');
+    texto.push('\t<nombre empresa>');
+    texto.push(escaparXML(datos.nombre_empresa));
+    texto.push('</nombre empresa>\n');
+    texto.push('\t<rfc empresa>');
+    texto.push(escaparXML(datos.rfc_empresa));
+    texto.push('</rfc empresa>\n');
+    texto.push('\t<direccion empresa>');
+    texto.push(escaparXML(datos.direccion_empresa));
+    texto.push('</direccion empresa>\n');
+    texto.push('\t<cfdi empresa>');
+    texto.push(escaparXML(datos.cfdi_empresa));
+    texto.push('</cfdi empresa>\n');
+    texto.push('\t<sello sat empresa>');
+    texto.push(escaparXML(datos.sat_empresa));
+    texto.push('</sello sat empresa>\n');
+    texto.push('\t<certificacion digital>');
+    texto.push(escaparXML(datos.certificacion_empresa));
+    texto.push('</certificacion digital>\n');
     texto.push('\t<nombre cliente>');
     texto.push(escaparXML(datos.nombre_cliente));
     texto.push('</nombre cliente>\n');
@@ -90,12 +108,17 @@ function generarXml(datos) {
     texto.push('\tSubtotal>');
     texto.push(escaparXML(datos.subtotal));
     texto.push('</Subtotal>\n');
+    texto.push('\tIva>');
+    texto.push(escaparXML(datos.iva));
+    texto.push('</Iva>\n');
     texto.push('\tTotal>');
     texto.push(escaparXML(datos.total));
     texto.push('</Total>\n');
-    texto.push('</fecha>\n');
+    texto.push('\t<Fecha>');
+    texto.push(escaparXML(datos.fecha));
+    texto.push('</Fecha>\n');
     texto.push('</factura>');
-    //No olvidemos especificar el tipo MIME correcto :)
+
     return new Blob(texto, {
         type: 'application/xml'
     });

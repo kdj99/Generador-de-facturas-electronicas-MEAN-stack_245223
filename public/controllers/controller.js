@@ -1,26 +1,29 @@
 var myApp = angular.module('myApp',[]);
 myApp.controller('efacturaCtrl',['$scope','$http', function($scope, $http){
-	console.log("Hola mundo desde el controlador");
+	console.log("en controlador");
 
 /*Ng-pattern usa la variable regex para comparar los campos asignados a cada input a validar*/
 $scope.regex = {
         telefono: /^[0-9]{3}-? ?[0-9]{7}$/,
         email: /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/,
         rfc: /^[a-zA-Z]{3,4}(\d{6})((\D|\d){3})?$/,
-        cifra: /^[0-9]{1,6}$/
+        cifra: /^[0-9]{1,6}$/,
+        decimales: /^\d+(\.\d{1,2})?$/
       };
 
 $scope.botonactualizar=false;
 $scope.moduloclientes=true;
-$scope.date = new Date();
+$scope.date = new Date()
  
 $scope.productos = [];
+
+/*Funciones para el manejo de productos a facturar*/
 $scope.add = function(p)
     {
       for(i=0;i<$scope.productos.length;i++){
         if(p.nombre==$scope.productos[i].nombre)
         {
-          alert("El producto ingresado posee el mismo nombre que uno ingresado anteriormente");
+          alert("El producto ingresado posee el mismo nombre que uno ingresado anteriormente, por favor eliminalo");
         }
       }
       var temp = {};
@@ -34,6 +37,7 @@ $scope.add = function(p)
       subtotalizar();
       iva();
       totalizar();
+      console.log($scope.productos)
     }
 
 $scope.eliminar = function(c)
@@ -69,6 +73,7 @@ $scope.actualizar_factura = function(i)
 var iva = function()
     {
       $scope.iva=($scope.subtotal * 16) / 100;
+      $scope.iva.toFixed(2); 
     }
 
 var subtotalizar = function () 
@@ -77,13 +82,14 @@ var subtotalizar = function ()
       for(i=0;i<$scope.productos.length;i++)
       {
       $scope.subtotal+= $scope.productos[i].importe;
-
+      $scope.subtotal.toFixed(2);
       }
     }
 
 var totalizar = function()
     {
       $scope.total = ($scope.subtotal + $scope.iva);
+      $scope.total.toFixed(2);
     }             
 
 /*Funciones que manejan operaciones con la base de datos*/
@@ -138,6 +144,8 @@ $scope.actualizar = function(){
   $scope.botonactualizar=false;
 	});
 };
+
+/*funcion para seleccionar cliente a facturar para aparecer en la factura*/
 
 $scope.seleccionar_cliente = function(id){
   console.log("En funcion seleecionar");

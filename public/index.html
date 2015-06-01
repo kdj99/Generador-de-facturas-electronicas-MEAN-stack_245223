@@ -93,7 +93,7 @@
 <h1>Modulo de generacion de factura electronica</h1>
 <h4>Selecciona el cliente a facturar</h4>
 <div class="panel-heading"><input type="text" ng-model="searchClienteFacturar" class="input-large search-query" placeholder="Buscar Cliente">
-<span><strong>Fecha: {{date | date:'yyyy-MM-dd'}}</strong></span>  
+<span><strong>Fecha: {{date | date:'medium'}}</strong></span>
 </div>
 <table class="table">
     <thead>
@@ -148,11 +148,11 @@ lJ8redA3/WPkNPZg3cVwktLihzbHd+VDD2L5NNezvfsg03Bqy8P8a5Ag4k4kWYBZnrvkrm/XGsJIQy9d
   <li><input id="facturar.email" ng-model="cliente_facturar.email"></li>
   <li><input id="facturar.rfc" ng-model="cliente_facturar.rfc"></li>
   <li><input id="facturar.nombre_producto" ng-model="producto.nombre"></li>
-  <li><input id="facturar.unitario" ng-model="producto.unitario"></li>
-  <li><input id="facturar.importe" ng-model="producto.importe"></li>
-  <li><input id="facturar.subtotal" ng-model="subtotal"></li>
-  <li><input id="facturar.iva" ng-model="iva"></li>
-  <li><input id="facturar.total" ng-model="total"></li>
+  <li><input id="facturar.unitario" ng-model="producto.unitario | currency"></li>
+  <li><input id="facturar.importe" ng-model="producto.importe | currency"></li>
+  <li><input id="facturar.subtotal" ng-model="subtotal | currency"></li>
+  <li><input id="facturar.iva" ng-model="iva | currency"></li>
+  <li><input id="facturar.total" ng-model="total | currency"></li>
 </ul>
 	<div class="panel panel-primary">		
 <table align="center" class="table table-bordered table-striped table-hover">
@@ -171,30 +171,41 @@ lJ8redA3/WPkNPZg3cVwktLihzbHd+VDD2L5NNezvfsg03Bqy8P8a5Ag4k4kWYBZnrvkrm/XGsJIQy9d
         <td id="facturar.nombre_producto">{{producto.nombre}}</td>
         <td><input type="number" id="facturar.cantidad" ng-model="producto.cantidad" ng-change="actualizar_factura($index)"></td>
         <td>$ {{producto.unitario}}</td>
-        <td>$ {{producto.importe}}</td>
+        <td>{{producto.importe | currency}}</td>
       </tr>
     </tbody>
   </table>
 </div>
-<button id="generar-xml" ng-disabled="productos.length==0||cantidad_total==0||cliente_facturar==0" class="btn btn-success">Generar factura electronica</button>
+<button id="generar-xml"  ng-disabled="productos.length==0||cantidad_total==0||cliente_facturar==0||producto.importe==0" class="btn btn-success">Generar factura electronica</button>
 <hr>
 <div align="center">
-<h2>Subtotal: $<strong>{{subtotal}} Pesos</strong></h2>
-<h2>IVA (16%): $<strong>{{iva}} Pesos</strong></h2>
-<h1>Total: $<strong>{{total}} Pesos</strong></h1>
+<div class="alert alert-success" ng-hide="productos.length==0||cantidad_total==0||cliente_facturar==0||producto.importe==0" role="alert"><strong>Para generar la factura haz click en "Generar factura electronica", antes revisa que los datos a facturar sean correctos</strong></div>
+<h2>Subtotal: <strong>{{subtotal | currency}} Pesos</strong></h2>
+<h2>IVA (16%): <strong>{{iva | currency}} Pesos</strong></h2>
+<h1>Total: <strong>{{total | currency}} Pesos</strong></h1>
+<!--Alertas de validacion para ingresar un producto-->
+<ul class="list-group">
+  <li class="list-group-item list-group-item-danger" ng-show="forma_producto.nombre_producto.$error.required">Nombre del producto Requerido !</li>
+  <li class="list-group-item list-group-item-success" ng-show="forma_producto.nombre_producto.$valid">Nombre valido, revisa que el nombre del producto este completo</li>
+  <li class="list-group-item list-group-item-danger" ng-show="forma_producto.cantidad_producto.$error.required">Cantidad de producto requerida !</li>
+  <li class="list-group-item list-group-item-danger" ng-show="forma_producto.cantidad_producto.$error.pattern">La cantidad no puede contener decimales</li>
+  <li class="list-group-item list-group-item-danger" ng-show="forma_producto.precio_producto.$error.required">Precio de producto requerido !</li>
+  <li class="list-group-item list-group-item-danger" ng-show="forma_producto.precio_producto.$error.pattern">El precio del producto solo puede contener 2 decimales</li>
+
+</ul> 
 </div>
 <hr>
 <h1 align="center">Ingreso de productos a la factura</h1>
 <form ng-submit="add(producto)" align="center" name="forma_producto">
 
 <div class="container">
-  <div class="col-md-3"><strong>Nombre del producto: </strong><input type="text" ng-model="producto.nombre" required ng-trim="false">
+  <div class="col-md-3"><strong>Nombre del producto: </strong><input type="text" name="nombre_producto" ng-model="producto.nombre" required ng-trim="false">
   </div>
-  <div class="col-md-3"><strong>Cantidad: </strong><input type="number" name="cantidad" ng-pattern="regex.cifra" required ng-trim="false" ng-change="cantidad_total=producto.cantidad" ng-model="producto.cantidad">
+  <div class="col-md-3"><strong>Cantidad: </strong><input type="number" name="cantidad_producto" ng-pattern="regex.cifra" required ng-trim="false" ng-change="cantidad_total=producto.cantidad" ng-model="producto.cantidad">
   </div>
   <div class="col-md-3"><div class="input-group">
     <strong>Precio: </strong><span class="input-group-addon">$</span>
-    <input ng-model="producto.unitario" type="number" name="precio" ng-pattern="regex.cifra" required ng-trim="false" class="form-control" aria-label="Amount">
+    <input ng-model="producto.unitario" type="number" step="any" name="precio_producto" ng-pattern="regex.decimales" required ng-trim="false" class="form-control" aria-label="Amount">
     </div>
   </div>
   <div class="col-md-3"><input type="submit" ng-disabled=" !forma_producto.$valid" value="Agregar producto a la factura" class="btn btn-primary">
