@@ -146,5 +146,4 @@ $scope.seleccionar_cliente = function(id){
     console.log($scope.cliente_facturar);
   });
 };
-
 }]);

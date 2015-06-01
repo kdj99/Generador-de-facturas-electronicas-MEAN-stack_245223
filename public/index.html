@@ -35,7 +35,7 @@
 <form class="navbar-form navbar-center" name="forma_cliente">
         <input name="nombre" type="text"  class="form-control" placeholder="ingresa el nombre del cliente" ng-model="cliente.nombre" required ng-trim="false">
         <input name="direccion" type="text" class="form-control" placeholder="ingresa el domicilio del cliente" ng-model="cliente.direccion" required ng-trim="false">
-        <input name="telefono" id="inputTelefono" type="number" class="form-control" placeholder="ingresa el numero de telefono del cliente" ng-model="cliente.telefono" ng-pattern="regex.telefono" required ng-trim="false">
+        <input name="telefono" type="number" class="form-control" placeholder="ingresa el numero de telefono del cliente" ng-model="cliente.telefono" ng-pattern="regex.telefono" required ng-trim="false">
         <input name="email" type="email" class="form-control" placeholder="ingresa el email del cliente" ng-model="cliente.email" ng-pattern="regex.email" required ng-trim="false">
         <input name="rfc" type="text" class="form-control" placeholder="RFC del cliente" ng-model="cliente.rfc" ng-pattern="regex.rfc" required ng-trim="false" style="text-transform:uppercase">
         <input type="button" class="btn btn-success" value="Ingresar cliente" ng-disabled=" !forma_cliente.$valid||botonactualizar==true" ng-click="addCliente()">
@@ -59,7 +59,6 @@
   <li class="list-group-item list-group-item-danger" ng-show="forma_cliente.rfc.$error.required">RFC Requerido !</li>
   <li class="list-group-item list-group-item-success" ng-show="forma_cliente.rfc.$valid">El RFC ingresado es corrrecto.</li>
 </ul>
-&nbsp;&nbsp;
 <div class="panel-heading"><input type="text" ng-model="searchCliente" class="input-large search-query" placeholder="Buscar Cliente">
 </div>
 <h3 align="center">Clientes registrados en el sistema</h3>      
@@ -123,13 +122,38 @@
 <h4>Datos del cliente a facturar</h4>
 
 <ul class="list-group" ng-show="cliente_facturar!=0">
-  <li class="list-group-item list-group-item-success"><span>Nombre: {{cliente_facturar.nombre | uppercase}}</span></li>
-  <li class="list-group-item list-group-item-success"><span>Domicilio: {{cliente_facturar.direccion | uppercase}}</span></li>
-  <li class="list-group-item list-group-item-success"><span>Telefono: {{cliente_facturar.telefono}}</span></li>
-  <li class="list-group-item list-group-item-success"><span>Email: {{cliente_facturar.email}}</span></li>
-  <li class="list-group-item list-group-item-success"><span>RFC: {{cliente_facturar.rfc | uppercase}}</span></li>
+  <li class="list-group-item list-group-item-success">Nombre: <span>{{cliente_facturar.nombre | uppercase}}</span></li>
+  <li class="list-group-item list-group-item-success">Domicilio: <span>{{cliente_facturar.direccion | uppercase}}</span></li>
+  <li class="list-group-item list-group-item-success"> Telefono: <span>{{cliente_facturar.telefono}}</span></li>
+  <li class="list-group-item list-group-item-success">Email: <span>{{cliente_facturar.email}}</span></li>
+  <li class="list-group-item list-group-item-success">RFC: <span>{{cliente_facturar.rfc | uppercase}}</span></li>
 </ul>
-
+<ul hidden="true">
+  <li><input id="facturar.nombre_empresa" value="Cyberpuerta S.A de C.V"></li>
+  <li><input id="facturar.rfc_empresa" value="CYB080602JSA"></li>
+  <li><input id="facturar.direccion_empresa" value="El carmen 531, Col. Camino Real, Zapopan Jalisco, Mexico, CP 45040"></li>
+  <li><input id="facturar.cfdi_empresa" value="                  MYosIfg2eMviGCRPbIP4tXwXjP+ubkn+QYy9Dvsq2wX4nwKx3dC9/Eyy874xjsvW8obrrM2nhvtkeutGnx5DcYXRylJ8redA3/WP
+kNPZg3cVwktLihzbHd+VDD2L5NNezvfsg03Bqy8P8a5Ag4k4kWYBZnrvkrm/XGsJIQy9dBc=
+"></li>
+  <li><input id="facturar.sat_empresa" value="B1jM64aAjZOb7/k3u0a+08/wHrmjlATgGEnDlTUL4kILwLlOrO1aZnlfSE2RWVqWrSj333n587yizKgyKLYzgchn+zM3LoGJrB47
+ufYoJQrjKZpwp8SRqX0kHRA6YUDopiZpZAw+OQsFaxT4DSZ4BzFW530t55aVUjSCWCiVUGs="></li>
+  <li><input id="facturar.certificacion_empresa" value="||1.0|87c43498-33fe-420f-9ec0-a4a331ea76e1|2014-12-
+01T10:34:08|MYosIfg2eMviGCRPbIP4tXwXjP+ubkn+QYy9Dvsq2wX4nwKx3dC9/Eyy874xjsvW8obrrM2nhvtkeutGnx5DcYXRy
+lJ8redA3/WPkNPZg3cVwktLihzbHd+VDD2L5NNezvfsg03Bqy8P8a5Ag4k4kWYBZnrvkrm/XGsJIQy9dBc=|0000100000020343
+0011||
+"></li>
+  <li><input id="facturar.nombre" ng-model="cliente_facturar.nombre"></li>
+  <li><input id="facturar.direccion" ng-model="cliente_facturar.direccion"></li>
+  <li><input id="facturar.telefono" ng-model="cliente_facturar.telefono"></li>
+  <li><input id="facturar.email" ng-model="cliente_facturar.email"></li>
+  <li><input id="facturar.rfc" ng-model="cliente_facturar.rfc"></li>
+  <li><input id="facturar.nombre_producto" ng-model="producto.nombre"></li>
+  <li><input id="facturar.unitario" ng-model="producto.unitario"></li>
+  <li><input id="facturar.importe" ng-model="producto.importe"></li>
+  <li><input id="facturar.subtotal" ng-model="subtotal"></li>
+  <li><input id="facturar.iva" ng-model="iva"></li>
+  <li><input id="facturar.total" ng-model="total"></li>
+</ul>
 	<div class="panel panel-primary">		
 <table align="center" class="table table-bordered table-striped table-hover">
     <thead>
@@ -144,15 +168,15 @@
     <tbody>
       <tr ng-repeat="producto in productos">
         <td><button class="btn btn-danger" ng-click="eliminar($index)">Eliminar de la factura</button><br></td>
-        <td>{{producto.nombre}}</td>
-        <td><input type="number" ng-model="producto.cantidad" ng-change="actualizar_factura($index)"></td>
+        <td id="facturar.nombre_producto">{{producto.nombre}}</td>
+        <td><input type="number" id="facturar.cantidad" ng-model="producto.cantidad" ng-change="actualizar_factura($index)"></td>
         <td>$ {{producto.unitario}}</td>
         <td>$ {{producto.importe}}</td>
       </tr>
     </tbody>
   </table>
 </div>
-<button ng-click="generar()" ng-disabled="productos.length==0||cantidad_total==0||cliente_facturar==0" class="btn btn-success">Generar factura electronica</button>
+<button id="generar-xml" ng-disabled="productos.length==0||cantidad_total==0||cliente_facturar==0" class="btn btn-success">Generar factura electronica</button>
 <hr>
 <div align="center">
 <h2>Subtotal: $<strong>{{subtotal}} Pesos</strong></h2>
@@ -180,5 +204,6 @@
 </div>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 	<script src="controllers/controller.js"></script>
+  <script src="xml.js"></script>
 </body>
 </html>
