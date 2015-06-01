@@ -213,6 +213,50 @@ lJ8redA3/WPkNPZg3cVwktLihzbHd+VDD2L5NNezvfsg03Bqy8P8a5Ag4k4kWYBZnrvkrm/XGsJIQy9d
 </form>
 </div>
 </div>
+
+
+<div id="ncliente" hidden>
+  <h6>{{cliente_facturar.nombre | uppercase}}</h6>
+  <h6>Telefono: {{cliente_facturar.telefono}}</h6>
+  <h6>E-mail: {{cliente_facturar.email}}</h6>
+</div>
+<div id="rfccliente" hidden>
+  <h6>{{cliente_facturar.rfc | uppercase}}</h6>
+</div>
+<div id="dcliente" hidden>
+  <h6>{{cliente_facturar.direccion | uppercase}}</h6>
+</div>
+
+<div>
+
+</div>
+
+<div>
+<table id="productospdf" hidden>
+        <thead>
+            <tr class='warning'>
+                <th>Cant.</th>
+                <th>Nombre</th>
+                <th>P.Unit.</th>
+                <th>Importe</th>
+          </tr>
+        </thead>
+    <tbody>
+      <tr ng-repeat="producto in productos">
+        <td>{{producto.cantidad}}</td>
+        <td>{{producto.nombre | uppercase}}</td>
+        <td>{{producto.unitario | currency}}</td>
+        <td>{{producto.importe | currency}}</td>
+      </tr>
+    </tbody>
+</table>
+</div>
+<div id="totales" hidden>
+  <h5>Subtotal: {{subtotal | currency}}</h5>
+  <h5>IVA 16%:  {{iva | currency}}</h5>
+  <h5>Total:    {{total | currency}}</h5>
+</div>
+
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 	<script src="controllers/controller.js"></script>
   <script src="xml.js"></script>
